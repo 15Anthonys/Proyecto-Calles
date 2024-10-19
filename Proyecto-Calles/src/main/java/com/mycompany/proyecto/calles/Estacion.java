@@ -6,9 +6,20 @@ package com.mycompany.proyecto.calles;
 
 /**
  *
- * @author Usuario
+ * @author ffust
  */
-public class Grafo {
-  
-}
+public class Estacion {
+    
+    Estacion pNext;
+    Estacion Prev;
+    Estacion peatonal;
+    
+    
+    
 
+    
+    
+    
+    
+    
+}

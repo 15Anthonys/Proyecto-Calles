@@ -8,6 +8,6 @@ package com.mycompany.proyecto.calles;
  *
  * @author ffust
  */
-public class Linea {
+public class NodoListaAdyacencia {
     
 }

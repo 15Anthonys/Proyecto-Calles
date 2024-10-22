@@ -69,4 +69,5 @@
         <maven.compiler.target>23</maven.compiler.target>
         <exec.mainClass>com.mycompany.proyecto.calles.ProyectoCalles</exec.mainClass>
     </properties>
+    <name>Proyecto-Calles-Pruebitas</name>
 </project>

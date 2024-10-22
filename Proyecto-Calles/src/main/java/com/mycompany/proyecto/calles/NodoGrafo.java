@@ -10,12 +10,14 @@ package com.mycompany.proyecto.calles;
  */
 public class NodoGrafo {
     
-    private ListaAdyacencia listaAdyacencia;
-    private Estacion estacion;
+    ListaAdyacencia listaAdyacencia;
+    Estacion estacion;
+    NodoGrafo pNext;
 
     public NodoGrafo( Estacion estacion) {
         this.listaAdyacencia = new ListaAdyacencia();
         this.estacion = estacion;
+        this.pNext = null;
     }
 
     /**
@@ -45,5 +47,20 @@ public class NodoGrafo {
     public void setEstacion(Estacion estacion) {
         this.estacion = estacion;
     }
+
+    /**
+     * @return the pNext
+     */
+    public NodoGrafo getpNext() {
+        return pNext;
+    }
+
+    /**
+     * @param pNext the pNext to set
+     */
+    public void setpNext(NodoGrafo pNext) {
+        this.pNext = pNext;
+    }
     
 }
+

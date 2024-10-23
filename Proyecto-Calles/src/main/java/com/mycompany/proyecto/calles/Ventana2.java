@@ -13,8 +13,10 @@ import org.json.JSONTokener;
 /**
  *
  * @author dugla
- */
+ */ 
 public class Ventana2 extends javax.swing.JFrame {
+    
+    //declaracion de variables
     private JSONObject jsonObject;
     private String data;
     private InterfazPrueba interfacita;
@@ -35,12 +37,12 @@ public class Ventana2 extends javax.swing.JFrame {
         });
     }
   
-    
+    //recibe de la ventana 1 el dato que pasamos para trabajar en la ventana 2
     public void SetData(String data){
         this.data = data;
         loadJsonFile();
     }
-    
+    //metodo para agregar estaciones a la cajita de opciones anidadas para las lineas y estaciones, se trabaja con librerias json (ayuda extra)
     private void populateLineComboBox(JSONObject jsonObject) {
         jComboBoxLines.removeAllItems();
         JSONArray networksArray = jsonObject.names();
@@ -54,7 +56,7 @@ public class Ventana2 extends javax.swing.JFrame {
             }
         }
     }
-    
+    //metodo para cargan los archivos json
     private void loadJsonFile() {
         try {
             JSONObject jsonObject = new JSONObject(new JSONTokener(data));
@@ -65,7 +67,7 @@ public class Ventana2 extends javax.swing.JFrame {
         }
     }
     
-    
+    //metodo para cargar las paradas por linea (se uso la implementacion de archivos JSON)
     private void loadStopsForLine(String line) {
         jComboBoxStops.removeAllItems();
         JSONArray networksArray = jsonObject.names();
@@ -92,7 +94,7 @@ public class Ventana2 extends javax.swing.JFrame {
         }
     }
         
-    
+    //metodo para mostrar la cajita de lineas
     private void jComboBoxLinesActionPerformed(ActionEvent evt) {
         String selectedLine = (String) jComboBoxLines.getSelectedItem();
         if (selectedLine != null) {
@@ -118,7 +120,7 @@ public class Ventana2 extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        grafito = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         RegresarAtras = new javax.swing.JButton();
         jComboBoxLines = new javax.swing.JComboBox<>();
@@ -151,9 +153,14 @@ public class Ventana2 extends javax.swing.JFrame {
         jButton2.setText("Agregar Sucursal");
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 120, -1));
 
-        jButton3.setBackground(new java.awt.Color(0, 204, 255));
-        jButton3.setText("Mostrar Grafo");
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 120, 30));
+        grafito.setBackground(new java.awt.Color(0, 204, 255));
+        grafito.setText("Mostrar Grafo");
+        grafito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                grafitoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(grafito, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 120, 30));
 
         jButton4.setBackground(new java.awt.Color(255, 153, 255));
         jButton4.setText("Indicador de Cobertura");
@@ -175,8 +182,8 @@ public class Ventana2 extends javax.swing.JFrame {
 
     private void RegresarAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegresarAtrasActionPerformed
         // TODO add your handling code here:
-        interfacita.setVisible(true);
-        this.setVisible(false);
+        interfacita.setVisible(true);//regresa a la interfaz anterior
+        this.setVisible(false);// cierra la interfaz actual
             
         
         
@@ -185,6 +192,15 @@ public class Ventana2 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void grafitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_grafitoActionPerformed
+        // TODO add your handling code here:
+        Grafo grafo = CargadorGrafo.cargarGrafoDesdeJson(data);
+        
+        // Mostrar el grafo
+        grafo.printGrafo();
+        
+    }//GEN-LAST:event_grafitoActionPerformed
 
     
     
@@ -228,9 +244,9 @@ public class Ventana2 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton RegresarAtras;
+    private javax.swing.JButton grafito;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBoxLines;
     private javax.swing.JComboBox<String> jComboBoxStops;

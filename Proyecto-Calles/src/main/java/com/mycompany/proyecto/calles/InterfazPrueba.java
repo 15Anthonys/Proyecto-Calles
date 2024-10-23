@@ -26,11 +26,12 @@ public class InterfazPrueba extends javax.swing.JFrame {
      */
     public InterfazPrueba() {
         initComponents();
-        setLocationRelativeTo(null);
-        inputArea.setEditable(false);
-        jButton1.setEnabled(false);
+        setLocationRelativeTo(null);// centrar mi interfaz
+        inputArea.setEditable(false); // no puedo editar lo que hay dentro de mi text area
+        jButton1.setEnabled(false); // no puedo darle al boton hasta que haya un metodo que me lo pueda acceder
     }
     
+    //metodo para validar si el archivo seleccionado del jfilechooser cumple con el mismo formato que nos indica el proyecto
     private static boolean validarFormatoJson(String jsonString) {
         try {
             JSONObject jsonObject = new JSONObject(new JSONTokener(jsonString));
@@ -144,10 +145,10 @@ public class InterfazPrueba extends javax.swing.JFrame {
 
     private void Boton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Boton1ActionPerformed
         // TODO add your handling code here:
-        
+        //crea la variable para poder seleccionar mi archivo json
         JFileChooser fileChooser = new JFileChooser();
 
-        // Define el filtro de archivos
+        // Define el filtro de archivos, o sea que desplega unas opciones que me acepten solo archivos de tipo jSon aunque eso puede cambiarse
         fileChooser.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File file) {
@@ -168,12 +169,14 @@ public class InterfazPrueba extends javax.swing.JFrame {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             String extension = getFileExtension(selectedFile);
+            //validamos si el archivo seleccionado es de tipo json
             if (!extension.equals("json")) {
                 JOptionPane.showMessageDialog(rootPane,
                         "Archivo no válido. Por favor, selecciona un archivo JSON.",
                         "Error de tipo de archivo",
                         JOptionPane.ERROR_MESSAGE);
             } else {
+                //ahora procedemos a leer ese archvi json correspondiente
                 try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
                     StringBuilder jsonContent = new StringBuilder();
                     String line;
@@ -181,10 +184,10 @@ public class InterfazPrueba extends javax.swing.JFrame {
                         jsonContent.append(line).append("\n");
                     }
                     JOptionPane.showMessageDialog(rootPane, "Archivo seleccionado correctamente");
-                    jButton1.setEnabled(true);
-                    inputArea.setText(jsonContent.toString());
+                    jButton1.setEnabled(true); // ya podemos usar el boton para acceder a la siguiente accion
+                    inputArea.setText(jsonContent.toString()); // escribimos nuestro json  previamente transformado a string en text area
                 } catch (IOException e) {
-                    JOptionPane.showMessageDialog(rootPane,
+                    JOptionPane.showMessageDialog(rootPane, //caso si ocurre un error inesperado
                             "Error al leer el archivo: " + e.getMessage(),
                             "Error de lectura",
                             JOptionPane.ERROR_MESSAGE);
@@ -200,14 +203,17 @@ public class InterfazPrueba extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
+        //creamos un string para obtener el archivo previamente escrito en el text area
         String traertexto = inputArea.getText();
-        boolean Esvalido = validarFormatoJson(traertexto);
+        boolean Esvalido = validarFormatoJson(traertexto); // verificamos si sigue el formato que nos indica el proyecto de como tiene que ser el archivo json
         if (Esvalido) {
                 JOptionPane.showMessageDialog(rootPane, "Formato válido");
-                Ventana2 ventanita2 = new Ventana2(this);
-                ventanita2.SetData(traertexto);
-                ventanita2.setVisible(true);
-                this.setVisible(false);
+                CargadorGrafo grafito = new CargadorGrafo(this);
+                grafito.enviardatito(traertexto);// enviamos nuestro archivo para que se construya en la clase grafo y lo enviamos
+                Ventana2 ventanita2 = new Ventana2(this); //creamos esto para trabajar con un dato en 2 ventanas diferentes
+                ventanita2.SetData(traertexto); // pasamos como parametro el dato que en este caso sera nuestro string transformado previamente de json
+                ventanita2.setVisible(true); // pasamos a la siguiente ventana
+                this.setVisible(false); // cerramos esta ventana actual
                 
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Formato inválido. Revisa el contenido.", "Error de Formato", JOptionPane.ERROR_MESSAGE);

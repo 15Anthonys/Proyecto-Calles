@@ -11,10 +11,6 @@ package com.mycompany.proyecto.calles;
 public class ProyectoCalles {
 
     public static void main(String[] args) {
-        
-        //aca no es el main
-        
- 
+        System.out.println("Hello World!");
     }
 }
-/// git search

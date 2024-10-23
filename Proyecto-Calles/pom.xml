@@ -22,12 +22,6 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>orgjson</groupId>
-            <artifactId>orgjson</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>com.salesforce.functions</groupId>
             <artifactId>sf-fx-sdk-java</artifactId>
             <version>1.1.2</version>
@@ -41,24 +35,6 @@
         <dependency>
             <groupId>grafo</groupId>
             <artifactId>grafo</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>grafo1</groupId>
-            <artifactId>grafo1</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>grafo2</groupId>
-            <artifactId>grafo2</artifactId>
-            <version>1.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>grafo3</groupId>
-            <artifactId>grafo3</artifactId>
             <version>1.0</version>
             <type>jar</type>
         </dependency>

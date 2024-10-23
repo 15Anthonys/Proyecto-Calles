@@ -64,22 +64,39 @@ public class CargadorGrafo {
                     String nombreCombinado = origen + ": " + destino;
 
                     // Verificar si la estación combinada ya existe
-                    NodoGrafo nodoCombinado = buscarNodo(grafo, nombreCombinado);
+                    NodoGrafo nodoCombinado = buscarEstacionCombinada(grafo, nombreCombinado);
                     if (nodoCombinado == null) {
                         nodoCombinado = new NodoGrafo(new Estacion(nombreCombinado));
                         grafo.agregarNodo(nodoCombinado);
                     }
 
-                    // Establecer adyacencias
+                    // Establecer adyacencias con estaciones previas y siguientes
                     if (nodoAnterior != null) {
-                        // Conectar el nodo anterior con la estación combinada
-                        if (!nodoAnterior.getListaAdyacencia().existeAdyacencia(nodoCombinado)) {
-                            nodoAnterior.getListaAdyacencia().nuevaAdyacencia(nodoCombinado);
+                        agregarAdyacencia(nodoAnterior, nodoCombinado);
+                    }
+
+                    // Conectar la estación combinada con otras estaciones de la línea
+                    for (int k = j + 1; k < paradas.length(); k++) {
+                        Object siguienteParada = paradas.get(k);
+                        NodoGrafo nodoSiguiente;
+
+                        if (siguienteParada instanceof String) {
+                            nodoSiguiente = buscarNodo(grafo, (String) siguienteParada);
+                        } else if (siguienteParada instanceof JSONObject) {
+                            JSONObject siguienteConexion = (JSONObject) siguienteParada;
+                            String siguienteOrigen = siguienteConexion.keys().next();
+                            String siguienteDestino = siguienteConexion.getString(siguienteOrigen);
+                            String siguienteNombreCombinado = siguienteOrigen + ": " + siguienteDestino;
+                            nodoSiguiente = buscarEstacionCombinada(grafo, siguienteNombreCombinado);
+                        } else {
+                            continue; // Si no es ni String ni JSONObject, continuar
                         }
-                        if (!nodoCombinado.getListaAdyacencia().existeAdyacencia(nodoAnterior)) {
-                            nodoCombinado.getListaAdyacencia().nuevaAdyacencia(nodoAnterior);
+
+                        if (nodoSiguiente != null) {
+                            agregarAdyacencia(nodoCombinado, nodoSiguiente);
                         }
                     }
+
                     nodoAnterior = nodoCombinado; // Actualizar el nodo anterior
                     continue; // Continuar al siguiente elemento
                 } else {
@@ -87,7 +104,7 @@ public class CargadorGrafo {
                 }
 
                 // Verificar si la estación ya existe
-                NodoGrafo nodoActual = buscarNodo(grafo, estacion.getNombreEstacion());
+                NodoGrafo nodoActual = buscarEstacionCombinada(grafo, estacion.getNombreEstacion());
                 if (nodoActual == null) {
                     nodoActual = new NodoGrafo(estacion);
                     grafo.agregarNodo(nodoActual);
@@ -95,12 +112,7 @@ public class CargadorGrafo {
 
                 // Crear la adyacencia
                 if (nodoAnterior != null) {
-                    if (!nodoAnterior.getListaAdyacencia().existeAdyacencia(nodoActual)) {
-                        nodoAnterior.getListaAdyacencia().nuevaAdyacencia(nodoActual);
-                    }
-                    if (!nodoActual.getListaAdyacencia().existeAdyacencia(nodoAnterior)) {
-                        nodoActual.getListaAdyacencia().nuevaAdyacencia(nodoAnterior); // Adyacencia inversa
-                    }
+                    agregarAdyacencia(nodoAnterior, nodoActual);
                 }
                 nodoAnterior = nodoActual; // Actualizar el nodo anterior
             }
@@ -110,6 +122,33 @@ public class CargadorGrafo {
     }
 
     return grafo;
+}
+    
+    private static NodoGrafo buscarEstacionCombinada(Grafo grafo, String nombreEstacion) {
+    // Buscar la estación en su forma original
+    NodoGrafo nodo = buscarNodo(grafo, nombreEstacion);
+    if (nodo != null) {
+        return nodo; // Si se encuentra, retornar el nodo
+    }
+
+    // Buscar la estación en su forma invertida
+    String[] partes = nombreEstacion.split(":");
+    if (partes.length == 2) {
+        String nombreInvertido = partes[1].trim() + ": " + partes[0].trim();
+        return buscarNodo(grafo, nombreInvertido); // Retornar si se encuentra el invertido
+    }
+
+    return null; // Si no se encuentra ninguna de las dos
+}
+
+
+    private static void agregarAdyacencia(NodoGrafo nodo1, NodoGrafo nodo2) {
+    if (!nodo1.getListaAdyacencia().existeAdyacencia(nodo2)) {
+        nodo1.getListaAdyacencia().nuevaAdyacencia(nodo2);
+    }
+    if (!nodo2.getListaAdyacencia().existeAdyacencia(nodo1)) {
+        nodo2.getListaAdyacencia().nuevaAdyacencia(nodo1); // Adyacencia inversa
+    }
 }
 
 // Método para buscar un nodo en el grafo por nombre de estación

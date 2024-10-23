@@ -3,12 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.proyecto.calles;
+import java.awt.BorderLayout;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.EdgeRejectedException;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.view.Viewer;
+import org.graphstream.ui.view.ViewerPipe;
+import org.graphstream.ui.swing_viewer.SwingViewer;
 
 /**
  *
@@ -21,8 +30,67 @@ public class Ventana2 extends javax.swing.JFrame {
     private String data;
     private InterfazPrueba interfacita;
     
-    
+    public void dibujarGrafo(Grafo grafo) {
+        // Crear el grafo
+        Graph graph = new SingleGraph("Grafo");
 
+        // Agregar nodos con nombres de estación
+        NodoGrafo actual = grafo.getpFirst();
+        while (actual != null) {
+            String nombreEstacion = actual.getEstacion().getNombreEstacion().replace(":", "").replace(" ", "_");
+            graph.addNode(nombreEstacion).setAttribute("ui.label", actual.getEstacion().getNombreEstacion()); // Set label
+            actual = actual.getpNext();
+        }
+
+        // Agregar aristas
+        actual = grafo.getpFirst();
+        while (actual != null) {
+            String nombreEstacion = actual.getEstacion().getNombreEstacion().replace(":", "").replace(" ", "_");
+            NodoListaAdyacencia adyacente = actual.getListaAdyacencia().getHead();
+            while (adyacente != null) {
+                String nombreAdyacente = adyacente.getEstacion().getNombreEstacion().replace(":", "").replace(" ", "_");
+                String edgeId = nombreEstacion + "-" + nombreAdyacente;
+
+                // Agregar la arista solo si no existe
+                if (graph.getEdge(edgeId) == null) {
+                    try {
+                        graph.addEdge(edgeId, nombreEstacion, nombreAdyacente, true); // true para aristas dirigidas
+                    } catch (EdgeRejectedException e) {
+                        System.out.println("Edge rejected: " + edgeId);
+                    }
+                }
+
+                adyacente = adyacente.getpNext(); // Mover al siguiente nodo
+            }
+            actual = actual.getpNext();
+        }
+
+        // Establecer el estilo del grafo
+        graph.setAttribute("ui.stylesheet", "node { fill-color: red; }");
+        graph.setAttribute("ui.quality");
+        graph.setAttribute("ui.antialias");
+
+        // Crear el GraphViewer
+        // Crear el GraphViewer
+        SwingViewer viewer = new SwingViewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        viewer.enableAutoLayout(); // Habilitar auto-layout
+
+    // Obtener el panel de visualización
+        viewer.addDefaultView(false); // false para no crear un JFrame
+        
+        JPanel viewerPanel = (JPanel) viewer.getDefaultView();
+
+        // Limpiar y agregar el panel al JPanel existente
+        MostrareAcaPanelGrafo.setLayout(new BorderLayout());
+        MostrareAcaPanelGrafo.removeAll(); // Limpiar el panel
+        MostrareAcaPanelGrafo.add(viewerPanel, BorderLayout.CENTER); // Agregar el panel del viewer
+        MostrareAcaPanelGrafo.revalidate(); // Revalidar el panel
+        MostrareAcaPanelGrafo.repaint(); // Volver a dibujar el panel
+
+// Mostrar el grafo
+        viewer.enableAutoLayout();
+
+    }
     /**
      * Creates new form Ventana2
      */
@@ -117,24 +185,25 @@ public class Ventana2 extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         pelo = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
         grafito = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         RegresarAtras = new javax.swing.JButton();
         jComboBoxLines = new javax.swing.JComboBox<>();
+        MostrareAcaPanelGrafo = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 204, 255));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setForeground(new java.awt.Color(255, 204, 255));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        getContentPane().add(jComboBoxStops, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 230, -1));
+        getContentPane().add(jComboBoxStops, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 570, 230, -1));
 
         jLabel1.setText("Selecciona la Parada:");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 120, 20));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 570, 120, 20));
 
         pelo.setText("Seleccionar la Linea:");
-        getContentPane().add(pelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 180, 20));
+        getContentPane().add(pelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 610, 180, 20));
 
         jButton1.setBackground(new java.awt.Color(102, 255, 0));
         jButton1.setText("Aceptar");
@@ -143,15 +212,7 @@ public class Ventana2 extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 190, -1, -1));
-
-        jLabel3.setText("Ingrese el radio t paradas:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 150, -1));
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 250, 70, -1));
-
-        jButton2.setBackground(new java.awt.Color(255, 255, 102));
-        jButton2.setText("Agregar Sucursal");
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 120, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 590, -1, -1));
 
         grafito.setBackground(new java.awt.Color(0, 204, 255));
         grafito.setText("Mostrar Grafo");
@@ -160,11 +221,7 @@ public class Ventana2 extends javax.swing.JFrame {
                 grafitoActionPerformed(evt);
             }
         });
-        getContentPane().add(grafito, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 120, 30));
-
-        jButton4.setBackground(new java.awt.Color(255, 153, 255));
-        jButton4.setText("Indicador de Cobertura");
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 370, 160, 30));
+        getContentPane().add(grafito, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 120, 40));
 
         RegresarAtras.setBackground(new java.awt.Color(255, 153, 153));
         RegresarAtras.setText("Regresar");
@@ -175,7 +232,13 @@ public class Ventana2 extends javax.swing.JFrame {
         });
         getContentPane().add(RegresarAtras, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
-        getContentPane().add(jComboBoxLines, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 110, 230, -1));
+        getContentPane().add(jComboBoxLines, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 610, 230, -1));
+
+        MostrareAcaPanelGrafo.setBackground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(MostrareAcaPanelGrafo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 730, 540));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 570, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -196,10 +259,17 @@ public class Ventana2 extends javax.swing.JFrame {
     private void grafitoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_grafitoActionPerformed
         // TODO add your handling code here:
         Grafo grafo = CargadorGrafo.cargarGrafoDesdeJson(data);
-        
-        // Mostrar el grafo
+
+    // Verificar si el grafo se cargó correctamente
+    if (grafo != null) {
+        // Mostrar el grafo en consola
         grafo.printGrafo();
-        
+
+        // Dibujar el grafo en el hilo de eventos
+        SwingUtilities.invokeLater(() -> dibujarGrafo(grafo));
+    } else {
+        JOptionPane.showMessageDialog(this, "Error al cargar el grafo. Verifica los datos.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_grafitoActionPerformed
 
     
@@ -243,16 +313,14 @@ public class Ventana2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel MostrareAcaPanelGrafo;
     private javax.swing.JButton RegresarAtras;
     private javax.swing.JButton grafito;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBoxLines;
     private javax.swing.JComboBox<String> jComboBoxStops;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel pelo;
     // End of variables declaration//GEN-END:variables
 }

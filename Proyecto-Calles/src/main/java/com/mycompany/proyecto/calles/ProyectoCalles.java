@@ -8,13 +8,10 @@ package com.mycompany.proyecto.calles;
  *
  * @author Usuario
  */
-public class ProyectoCalles {
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
 
-    public static void main(String[] args) {
-        
-        //aca no es el main
-        
- 
-    }
+public class ProyectoCalles {
+    
 }
 /// git search

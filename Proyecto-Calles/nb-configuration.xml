@@ -47,7 +47,7 @@ Any value defined here will override the pom.xml file value but is only applicab
         <org-netbeans-spi-editor-hints-projects.text.x-java.Javac_5f_FINALLY.enabled>true</org-netbeans-spi-editor-hints-projects.text.x-java.Javac_5f_FINALLY.enabled>
         <org-netbeans-spi-editor-hints-projects.text.x-java.Javac_5f_EMPTY_5f_STATEMENT_5f_AFTER_5f_IF.enabled>true</org-netbeans-spi-editor-hints-projects.text.x-java.Javac_5f_EMPTY_5f_STATEMENT_5f_AFTER_5f_IF.enabled>
         <org-netbeans-spi-editor-hints-projects.text.x-java.Javac_5f_DIVISION_5f_BY_5f_ZERO.enabled>true</org-netbeans-spi-editor-hints-projects.text.x-java.Javac_5f_DIVISION_5f_BY_5f_ZERO.enabled>
-        <netbeans.compile.on.save>none</netbeans.compile.on.save>
+        <netbeans.compile.on.save>all</netbeans.compile.on.save>
         <org-netbeans-modules-javascript2-requirejs.enabled>true</org-netbeans-modules-javascript2-requirejs.enabled>
     </properties>
 </project-shared-configuration>

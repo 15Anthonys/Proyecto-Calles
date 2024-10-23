@@ -15,7 +15,7 @@ public class NodoListaAdyacencia {
 
     public NodoListaAdyacencia(Estacion estacion) {
         this.estacion = estacion;
-        this.pNext = pNext;
+        this.pNext = null;
     }
 
     /**

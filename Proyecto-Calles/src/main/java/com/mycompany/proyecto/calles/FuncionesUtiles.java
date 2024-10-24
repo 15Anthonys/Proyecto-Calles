@@ -88,7 +88,39 @@ public class FuncionesUtiles {
     }
     
     
+
+    public static ListaSimple obtenerNodosEnRangoDFS(Grafo grafo, NodoGrafo nodoInicial, int t) {
+        if (grafo == null || nodoInicial == null || t < 0) {
+            throw new IllegalArgumentException("El grafo y el nodo no pueden ser nulos, y t debe ser un entero positivo.");
+        }
+
+        ListaSimple nodosEnRango = new ListaSimple();
+        ListaSimple visitados = new ListaSimple();
+        DFSRecorrido(grafo, nodoInicial, nodosEnRango, visitados, t, 0);
+        return nodosEnRango; // Esta funcion retorna una lista
+    }
+
+    private static void DFSRecorrido(Grafo grafo, NodoGrafo nodo, ListaSimple nodosEnRango, ListaSimple visitados, int t, int distancia) {
+        if (nodo == null || visitados.contiene(nodo.getEstacion()) || distancia > t) {
+            return; // Si el nodo es nulo, ya fue visitado o se ha superado la distancia
+        }
+
+        // Marcar el nodo como visitado
+        visitados.agregar(nodo.getEstacion());
+
+        // Agregar el nodo a la lista de nodos en rango
+        nodosEnRango.agregar(nodo.getEstacion());
+
+        // Recorrer las adyacencias
+        NodoListaAdyacencia adyacente = nodo.getListaAdyacencia().getHead();
+        while (adyacente != null) {
+            NodoGrafo siguienteNodo = buscarNodoPorEstacion(grafo, adyacente.estacion); // Asegúrate de que esta función esté definida
+            DFSRecorrido(grafo, siguienteNodo, nodosEnRango, visitados, t, distancia + 1);
+            adyacente = adyacente.getpNext(); 
+        }
+    }   
 }
+
 
     
 

@@ -210,10 +210,11 @@ public class InterfazPrueba extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Formato válido");
                 CargadorGrafo grafito = new CargadorGrafo(this);
                 grafito.enviardatito(traertexto);// enviamos nuestro archivo para que se construya en la clase grafo y lo enviamos
-                Ventana2 ventanita2 = new Ventana2(this); //creamos esto para trabajar con un dato en 2 ventanas diferentes
-                ventanita2.SetData(traertexto); // pasamos como parametro el dato que en este caso sera nuestro string transformado previamente de json
-                ventanita2.setVisible(true); // pasamos a la siguiente ventana
-                this.setVisible(false); // cerramos esta ventana actual
+                PanelPestanas pestanitas = new PanelPestanas(this);
+                pestanitas.SetData(traertexto);
+                pestanitas.setVisible(true);
+                this.setVisible(false);
+                
                 
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Formato inválido. Revisa el contenido.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
@@ -221,7 +222,7 @@ public class InterfazPrueba extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     /**
      * @param args the command line arguments
      */

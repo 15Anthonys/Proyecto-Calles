@@ -4,10 +4,20 @@
  */
 package com.mycompany.proyecto.calles;
 
+
+
 /**
  *
  * @author ffust
  */
-public class Linea {
+public class FuncionesUtiles {
+    
+    public static void enlazarNodos(NodoGrafo nodo1, NodoGrafo nodo2){
+        
+        nodo1.listaAdyacencia.nuevaAdyacencia(nodo2);
+        nodo2.listaAdyacencia.nuevaAdyacencia(nodo1);
+        
+        
+    }
     
 }
